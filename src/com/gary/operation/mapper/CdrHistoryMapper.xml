@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gary.operation.mapper.CdrHistoryMapper" >
+  <resultMap id="BaseResultMap" type="com.gary.operation.domain.CdrHistory" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="Time" property="time" jdbcType="VARCHAR" />
+    <result column="OutTradeNo" property="outtradeno" jdbcType="VARCHAR" />
+    <result column="PaymentUser" property="paymentuser" jdbcType="VARCHAR" />
+    <result column="Location" property="location" jdbcType="VARCHAR" />
+    <result column="Subject" property="subject" jdbcType="VARCHAR" />
+    <result column="TotalFee" property="totalfee" jdbcType="REAL" />
+    <result column="TimeStamp" property="timestamp" jdbcType="VARCHAR" />
+    <result column="TransactionID" property="transactionid" jdbcType="VARCHAR" />
+    <result column="AppKey" property="appkey" jdbcType="VARCHAR" />
+    <result column="AppName" property="appname" jdbcType="VARCHAR" />
+    <result column="DeveloperID" property="developerid" jdbcType="VARCHAR" />
+    <result column="DeveloperName" property="developername" jdbcType="VARCHAR" />
+    <result column="ChannelID" property="channelid" jdbcType="VARCHAR" />
+    <result column="ChannelName" property="channelname" jdbcType="VARCHAR" />
+    <result column="ZhangQi" property="zhangqi" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, Time, OutTradeNo, PaymentUser, Location, Subject, TotalFee, TimeStamp, TransactionID, 
+    AppKey, AppName, DeveloperID, DeveloperName, ChannelID, ChannelName
+  </sql>
+  	<!-- 取出时间,转化为账期,作为combo用 -->
+	<select id="selectZhangqiCombo" resultType="hashmap">
+	SELECT  SUBSTRING(Time,2,6 )AS zhangqi FROM [CDR_HISTORY]
+  		WHERE SUBSTRING(Time,2,6 ) <![CDATA[<]]> SUBSTRING(CONVERT(varchar(100), GETDATE(), 112),0,7)
+		GROUP BY SUBSTRING(Time,2,6 )
+  		ORDER  BY SUBSTRING(Time,2,6 ) DESC
+	</select>
+	<!-- 获取开发者,app 应收和 group by 开发者 app分组 -->
+	<select id="getDataByZhangqi" resultType="CdrHistory">
+		<!-- SELECT 此查询存在既没有ChannelID,ChannelName,也没有DeveloperID,DeveloperName (程序里做去除处理)
+		AppName ,
+		SUM(TotalFee) as TotalFee,
+		DeveloperID= ChannelID存在则取ChannelID否则取DeveloperID
+		case  WHEN ChannelID IS NULL or ChannelID='""' THEN DeveloperID
+		ELSE ChannelID
+		END,
+		DeveloperName = ChannelName存在则取ChannelName否则取DeveloperName
+		case  WHEN ChannelName IS NULL or ChannelName='""' THEN DeveloperName
+		ELSE ChannelName
+		END
+		FROM [CDR_HISTORY]
+		WHERE SUBSTRING(Time,2,6 )=#{zhangqi,jdbcType=VARCHAR}
+		group by DeveloperName,AppName,DeveloperID,ChannelID,ChannelName -->
+		
+		SELECT 
+		AppName ,
+		SUM(TotalFee) as TotalFee,
+		DeveloperID= --<!-- ChannelID存在则取ChannelID否则取DeveloperID -->
+		case  WHEN ChannelID IS NOT NULL AND ChannelID!='""' THEN ChannelID
+			  WHEN DeveloperID IS NOT NULL AND DeveloperID!='""' THEN DeveloperID
+		ELSE '无开发者ID'
+		END,
+		DeveloperName = --<!-- ChannelName存在则取ChannelName否则取DeveloperName -->
+		case  WHEN ChannelName IS NOT NULL AND ChannelName!='""' THEN ChannelName
+			  WHEN DeveloperName IS NOT  NULL AND DeveloperName!='""' THEN DeveloperName
+		ELSE '无开发者名称'
+		END
+		FROM [CDR_HISTORY]
+		WHERE SUBSTRING(Time,2,6 )=#{zhangqi,jdbcType=VARCHAR}
+		group by DeveloperName,AppName,DeveloperID,ChannelID,ChannelName
+	</select>
+	<!-- 获取地区,app 应收 和 group by 地区 app分组 -->
+	<select id="getAppAndLocation" resultType="CdrHistory">
+		SELECT AppName = <!-- 用appname+开发者ID构造appname(标记用途) -->
+		case  
+		WHEN ChannelID IS NOT NULL AND ChannelID!='""' THEN AppName+ChannelID
+		WHEN DeveloperID IS NOT NULL AND DeveloperID!='""' THEN AppName+DeveloperID
+		ELSE AppName+'无开发者ID'
+		END
+		,[Location]
+		,SUM(TotalFee) as TotalFee <!-- 排除无省份的 -->
+		FROM [CDR_HISTORY] WHERE [Location] <![CDATA[<>]]> '""' AND SUBSTRING(Time,2,6 )=#{zhangqi,jdbcType=VARCHAR}
+		group by AppName,Location,ChannelID,ChannelName,DeveloperID,DeveloperName
+	<!-- SELECT [Location],AppName,SUM(TotalFee) as TotalFee 排除无省份的
+		FROM [CDR_HISTORY] WHERE [Location] <![CDATA[<>]]> '""' AND SUBSTRING(Time,2,6 )=#{zhangqi,jdbcType=VARCHAR}
+		group by Location,AppName -->
+	</select>
+	<!-- 获取地区 应收 和 group by 地区 分组 -->
+	<select id="getLocationTotalFee" resultType="CdrHistory">
+		SELECT [Location],SUM(TotalFee) as TotalFee
+		FROM [CDR_HISTORY] WHERE SUBSTRING(Time,2,6 )=#{zhangqi,jdbcType=VARCHAR}
+		group BY Location
+	</select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from CDR_HISTORY
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from CDR_HISTORY
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gary.operation.domain.CdrHistory" >
+    insert into CDR_HISTORY (ID, Time, OutTradeNo, 
+      PaymentUser, Location, Subject, 
+      TotalFee, TimeStamp, TransactionID, 
+      AppKey, AppName, DeveloperID, 
+      DeveloperName, ChannelID, ChannelName
+      )
+    values (#{id,jdbcType=INTEGER}, #{time,jdbcType=VARCHAR}, #{outtradeno,jdbcType=VARCHAR}, 
+      #{paymentuser,jdbcType=VARCHAR}, #{location,jdbcType=VARCHAR}, #{subject,jdbcType=VARCHAR}, 
+      #{totalfee,jdbcType=REAL}, #{timestamp,jdbcType=VARCHAR}, #{transactionid,jdbcType=VARCHAR}, 
+      #{appkey,jdbcType=VARCHAR}, #{appname,jdbcType=VARCHAR}, #{developerid,jdbcType=VARCHAR}, 
+      #{developername,jdbcType=VARCHAR}, #{channelid,jdbcType=VARCHAR}, #{channelname,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.gary.operation.domain.CdrHistory" >
+    insert into CDR_HISTORY
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="time != null" >
+        Time,
+      </if>
+      <if test="outtradeno != null" >
+        OutTradeNo,
+      </if>
+      <if test="paymentuser != null" >
+        PaymentUser,
+      </if>
+      <if test="location != null" >
+        Location,
+      </if>
+      <if test="subject != null" >
+        Subject,
+      </if>
+      <if test="totalfee != null" >
+        TotalFee,
+      </if>
+      <if test="timestamp != null" >
+        TimeStamp,
+      </if>
+      <if test="transactionid != null" >
+        TransactionID,
+      </if>
+      <if test="appkey != null" >
+        AppKey,
+      </if>
+      <if test="appname != null" >
+        AppName,
+      </if>
+      <if test="developerid != null" >
+        DeveloperID,
+      </if>
+      <if test="developername != null" >
+        DeveloperName,
+      </if>
+      <if test="channelid != null" >
+        ChannelID,
+      </if>
+      <if test="channelname != null" >
+        ChannelName,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="time != null" >
+        #{time,jdbcType=VARCHAR},
+      </if>
+      <if test="outtradeno != null" >
+        #{outtradeno,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentuser != null" >
+        #{paymentuser,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null" >
+        #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="subject != null" >
+        #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="totalfee != null" >
+        #{totalfee,jdbcType=REAL},
+      </if>
+      <if test="timestamp != null" >
+        #{timestamp,jdbcType=VARCHAR},
+      </if>
+      <if test="transactionid != null" >
+        #{transactionid,jdbcType=VARCHAR},
+      </if>
+      <if test="appkey != null" >
+        #{appkey,jdbcType=VARCHAR},
+      </if>
+      <if test="appname != null" >
+        #{appname,jdbcType=VARCHAR},
+      </if>
+      <if test="developerid != null" >
+        #{developerid,jdbcType=VARCHAR},
+      </if>
+      <if test="developername != null" >
+        #{developername,jdbcType=VARCHAR},
+      </if>
+      <if test="channelid != null" >
+        #{channelid,jdbcType=VARCHAR},
+      </if>
+      <if test="channelname != null" >
+        #{channelname,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gary.operation.domain.CdrHistory" >
+    update CDR_HISTORY
+    <set >
+      <if test="time != null" >
+        Time = #{time,jdbcType=VARCHAR},
+      </if>
+      <if test="outtradeno != null" >
+        OutTradeNo = #{outtradeno,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentuser != null" >
+        PaymentUser = #{paymentuser,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null" >
+        Location = #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="subject != null" >
+        Subject = #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="totalfee != null" >
+        TotalFee = #{totalfee,jdbcType=REAL},
+      </if>
+      <if test="timestamp != null" >
+        TimeStamp = #{timestamp,jdbcType=VARCHAR},
+      </if>
+      <if test="transactionid != null" >
+        TransactionID = #{transactionid,jdbcType=VARCHAR},
+      </if>
+      <if test="appkey != null" >
+        AppKey = #{appkey,jdbcType=VARCHAR},
+      </if>
+      <if test="appname != null" >
+        AppName = #{appname,jdbcType=VARCHAR},
+      </if>
+      <if test="developerid != null" >
+        DeveloperID = #{developerid,jdbcType=VARCHAR},
+      </if>
+      <if test="developername != null" >
+        DeveloperName = #{developername,jdbcType=VARCHAR},
+      </if>
+      <if test="channelid != null" >
+        ChannelID = #{channelid,jdbcType=VARCHAR},
+      </if>
+      <if test="channelname != null" >
+        ChannelName = #{channelname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gary.operation.domain.CdrHistory" >
+    update CDR_HISTORY
+    set Time = #{time,jdbcType=VARCHAR},
+      OutTradeNo = #{outtradeno,jdbcType=VARCHAR},
+      PaymentUser = #{paymentuser,jdbcType=VARCHAR},
+      Location = #{location,jdbcType=VARCHAR},
+      Subject = #{subject,jdbcType=VARCHAR},
+      TotalFee = #{totalfee,jdbcType=REAL},
+      TimeStamp = #{timestamp,jdbcType=VARCHAR},
+      TransactionID = #{transactionid,jdbcType=VARCHAR},
+      AppKey = #{appkey,jdbcType=VARCHAR},
+      AppName = #{appname,jdbcType=VARCHAR},
+      DeveloperID = #{developerid,jdbcType=VARCHAR},
+      DeveloperName = #{developername,jdbcType=VARCHAR},
+      ChannelID = #{channelid,jdbcType=VARCHAR},
+      ChannelName = #{channelname,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

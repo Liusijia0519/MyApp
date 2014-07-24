@@ -1,0 +1,25 @@
+.system-user-userlist-gridlock .x-grid-cell {
+    text-decoration: line-through;
+    color: gray;
+}
+
+.system-business-project-updated .x-grid-cell {
+    color: red;
+}
+
+.system-business-projectRecord-version .x-grid-cell {
+    color: green;
+}
+
+
+.businessIcons-accept {
+	background-image:url(../images/icon16/accept.png);
+}
+
+.businessIcons-delete {
+	background-image:url(../images/icon16/delete.png);
+}
+
+.businessIcons-exclamation {
+	background-image:url(../images/icon16/exclamation.png);
+}

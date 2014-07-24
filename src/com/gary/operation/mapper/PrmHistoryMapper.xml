@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gary.operation.mapper.PrmHistoryMapper">
+	<resultMap id="BaseResultMap" type="com.gary.operation.domain.PrmHistory">
+		<id column="ID" property="id" jdbcType="VARCHAR" />
+		<result column="PID" property="pid" jdbcType="VARCHAR" />
+		<result column="Province" property="province" jdbcType="VARCHAR" />
+		<result column="AmountReceivable" property="amountreceivable"
+			jdbcType="DECIMAL" />
+		<result column="AmountReceived" property="amountreceived"
+			jdbcType="DECIMAL" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		ID, PID, Province, AmountReceivable, AmountReceived
+	</sql>
+	<!-- 获取每个省的PRM应收 -->
+	<select id="getProvinceMoney"  parameterType="java.lang.String" resultType="PrmHistory">
+		SELECT
+		[Province]
+		,[AmountReceivable]
+		FROM [PRM_HISTORY]
+		where PID=#{pid,jdbcType=VARCHAR}
+	</select>
+	<select id="select" resultType="PrmHistory">
+		SELECT * FROM Prm_History
+		<where>
+			<if test="pid != null">
+				AND PID = #{pid,jdbcType=VARCHAR}
+			</if>
+			<if test="province != null">
+				AND Province = #{province,jdbcType=VARCHAR}
+			</if>
+			<if test="amountreceivable != null">
+				AND AmountReceivable =
+				#{amountreceivable,jdbcType=DECIMAL}
+			</if>
+			<if test="amountreceived != null">
+				AND AmountReceived = #{amountreceived,jdbcType=DECIMAL}
+			</if>
+		</where>
+		ORDER BY PID DESC
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from PRM_HISTORY
+		where ID = #{id,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		PRM_HISTORY
+		where ID = #{id,jdbcType=VARCHAR}
+	</delete>
+	<!-- 根据账期删除 -->
+	<delete id="deleteByZhangqi" parameterType="java.lang.String">
+		delete from
+		PRM_HISTORY
+		where pid = #{zhangqi,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.gary.operation.domain.PrmHistory">
+		insert into PRM_HISTORY (ID,
+		PID, Province,
+		AmountReceivable, AmountReceived)
+		values
+		(#{id,jdbcType=VARCHAR}, #{pid,jdbcType=VARCHAR},
+		#{province,jdbcType=VARCHAR},
+		#{amountreceivable,jdbcType=DECIMAL},
+		#{amountreceived,jdbcType=DECIMAL})
+	</insert>
+	<insert id="insertSelective" parameterType="com.gary.operation.domain.PrmHistory">
+		insert into PRM_HISTORY
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID,
+			</if>
+			<if test="pid != null">
+				PID,
+			</if>
+			<if test="province != null">
+				Province,
+			</if>
+			<if test="amountreceivable != null">
+				AmountReceivable,
+			</if>
+			<if test="amountreceived != null">
+				AmountReceived,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="pid != null">
+				#{pid,jdbcType=VARCHAR},
+			</if>
+			<if test="province != null">
+				#{province,jdbcType=VARCHAR},
+			</if>
+			<if test="amountreceivable != null">
+				#{amountreceivable,jdbcType=DECIMAL},
+			</if>
+			<if test="amountreceived != null">
+				#{amountreceived,jdbcType=DECIMAL},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.gary.operation.domain.PrmHistory">
+		update PRM_HISTORY
+		<set>
+			<if test="pid != null">
+				PID = #{pid,jdbcType=VARCHAR},
+			</if>
+			<if test="province != null">
+				Province = #{province,jdbcType=VARCHAR},
+			</if>
+			<if test="amountreceivable != null">
+				AmountReceivable = #{amountreceivable,jdbcType=DECIMAL},
+			</if>
+			<if test="amountreceived != null">
+				AmountReceived = #{amountreceived,jdbcType=DECIMAL},
+			</if>
+		</set>
+		where ID = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.gary.operation.domain.PrmHistory">
+		update PRM_HISTORY
+		set PID = #{pid,jdbcType=VARCHAR},
+		Province =
+		#{province,jdbcType=VARCHAR},
+		AmountReceivable =
+		#{amountreceivable,jdbcType=DECIMAL},
+		AmountReceived =
+		#{amountreceived,jdbcType=DECIMAL}
+		where ID = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

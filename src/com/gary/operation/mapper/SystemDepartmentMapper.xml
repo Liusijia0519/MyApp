@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gary.operation.mapper.SystemDepartmentMapper">
+	<select id="selectAllDepartment" resultType="SystemDepartment">
+		 SELECT * FROM System_Department ORDER BY [index]
+	</select>
+	
+	<select id="selectAvailablDepartment" resultType="SystemDepartment">
+		SELECT * FROM System_Department WHERE availabl = 1 ORDER BY [index]
+	</select>
+	
+	<insert id="insertOrUpdate" parameterType="SystemDepartment">
+		IF NOT EXISTS (SELECT id FROM System_Department WHERE id = #{id})
+  			BEGIN 
+   				INSERT INTO dbo.System_Department(id, departmentName, createDate, parentId, leaf, [index], availabl)
+ 				VALUES  (#{id},#{text},GETDATE(),#{parentId},#{leaf},#{index},#{availabl})
+   			END
+  		ELSE
+    		BEGIN 
+   				UPDATE dbo.System_Department SET departmentName = #{text}, parentId=#{parentId}, leaf= #{leaf},
+         	    [index] = #{index}, availabl = #{availabl} WHERE id = #{id}
+   			END
+	</insert>
+	
+	<select id="selectByPrimaryKey" resultType="SystemDepartment">
+		 SELECT * FROM System_Department WHERE id = #{id}
+	</select>
+</mapper>

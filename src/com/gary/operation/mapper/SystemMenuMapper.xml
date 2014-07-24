@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gary.operation.mapper.SystemMenuMapper">
+	<select id="selectSystemMenu" resultType="SystemMenu">
+		SELECT * FROM
+		SYSTEM_MENU ORDER BY [index]
+	</select>
+
+	<select id="selectSystemMenuByUserId" parameterType="string"
+		resultType="SystemMenu">
+		SELECT * FROM SYSTEM_USER_RIGHTS WHERE user_id = #{user_id}
+		ORDER BY [index]
+	</select>
+	
+	<select id="selectMenuById" resultType="SystemMenu">
+		SELECT * FROM SYSTEM_MENU WHERE id = #{id}
+	</select>
+
+	<insert id="insertOrUpdateMenu" parameterType="SystemMenu">
+		IF NOT EXISTS
+		(SELECT
+		id FROM System_Menu WHERE id = #{id})
+		BEGIN
+		INSERT INTO dbo.System_Menu
+			( id ,
+			menuName ,
+			menuClass ,
+			extController ,
+			springController ,
+			leaf ,
+			icon16 ,
+			icon24 ,
+			icon32 ,
+			icon48 ,
+			[index] ,
+			parentId
+			)
+			VALUES
+			(#{id},
+			#{text},
+			#{menuClass},
+			#{extController},
+			#{springController},
+			#{leaf},
+			#{icon16},#{icon24},#{icon32},#{icon48},
+			#{index},#{parentId}
+			)
+		END
+		ELSE
+		BEGIN
+			UPDATE dbo.System_Menu SET
+			menuName = #{text},
+			menuClass = #{menuClass},
+			extController = #{extController},
+			springController = #{springController},
+			leaf = #{leaf},
+			icon16 = #{icon16},
+			icon24 = #{icon24},
+			icon32 = #{icon32},
+			icon48 = #{icon48},
+			[index] = #{index},
+			parentId = #{parentId}
+			WHERE id = #{id}
+		END
+	</insert>
+</mapper>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gary.operation.mapper.SystemRoleMapper">
+	<select id="selectSystemRole" resultType="SystemRole">
+		SELECT * FROM SYSTEM_ROLE
+	</select>
+	
+	<insert id="insertOrUpdate" parameterType="SystemRole">
+		IF NOT EXISTS (SELECT id FROM SYSTEM_ROLE WHERE id = #{id})
+		BEGIN
+			INSERT INTO dbo.System_Role
+          	( id, roleName, explain )
+	  		VALUES 
+	  		(#{id}, #{roleName}, #{explain})
+		END
+		ELSE
+		BEGIN
+			UPDATE dbo.System_Role SET
+			roleName = #{roleName}, explain = #{explain}
+			WHERE id = #{id}
+		END
+	</insert>
+	
+	<select id="selectMenuIdListByRoleId" resultType="string" parameterType="string">
+		SELECT menu_id FROM System_Role_Menu WHERE role_id = #{roleId}
+	</select>
+	
+	<select id="selectActionIdListByRoleId" resultType="string" parameterType="string">
+		SELECT action_id FROM System_Role_Action WHERE role_id = #{roleId}
+	</select>
+	
+	<insert id="insertRoleAction" parameterType="SystemRoleAction">
+		  INSERT INTO dbo.System_Role_Action
+          ( id, role_id, action_id )
+  			VALUES  ( 
+  			#{id}, #{role_id}, #{action_id}
+            )
+	</insert>
+	
+	<delete id="deleteRoleAction" parameterType="SystemRoleAction">
+		DELETE System_Role_Action WHERE role_id = #{role_id} AND action_id = #{action_id}
+	</delete>
+	
+	<insert id="insertRoleMenu" parameterType="SystemRoleMenu">
+		  INSERT INTO dbo.System_Role_Menu
+          ( id, role_id, menu_id )
+  			VALUES  ( 
+  			#{id}, #{role_id}, #{menu_id}
+            )
+	</insert>
+	
+	<delete id="deleteRoleMenu" parameterType="SystemRoleMenu">
+		DELETE System_Role_Menu WHERE role_id = #{role_id} AND menu_id = #{menu_id}
+	</delete>
+	
+	<delete id="deleteRoleById" parameterType="string">
+		DELETE dbo.System_Role WHERE id = #{roleId}
+	</delete>
+	
+	<delete id="deleteRoleMenuByRoleId" parameterType="string">
+		DELETE System_Role_Menu WHERE role_id = #{roleId}
+	</delete>
+	
+	<delete id="deleteRoleActionByRoleId" parameterType="string">
+		DELETE System_Role_Action WHERE role_id = #{roleId}
+	</delete>
+	
+	<delete id="deleteRoleUserByRoleId" parameterType="string">
+		DELETE System_User_Role WHERE role_id = #{roleId}
+	</delete>
+</mapper>

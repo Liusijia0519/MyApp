@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gary.operation.mapper.RatiochannelMapper">
+	<resultMap id="BaseResultMap" type="com.gary.operation.domain.Ratiochannel">
+		<id column="ID" property="id" jdbcType="VARCHAR" />
+		<result column="ChannelID" property="channelid" jdbcType="VARCHAR" />
+		<result column="DeveloperID" property="developerid" jdbcType="VARCHAR" />
+		<result column="Ratio" property="ratio" jdbcType="DECIMAL" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		ID, ChannelID, DeveloperID, Ratio
+	</sql>
+	<select id="select" resultType="Ratiochannel">
+		SELECT * FROM Ratiochannel
+		<where>
+			<if test="channelid != null">
+				AND ChannelID = #{channelid,jdbcType=VARCHAR}
+			</if>
+			<if test="developerid != null">
+				AND DeveloperID = #{developerid,jdbcType=VARCHAR}
+			</if>
+			<if test="ratio != null">
+				AND Ratio = #{ratio,jdbcType=DECIMAL}
+			</if>
+		</where>
+		ORDER BY Ratio DESC
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from RatioChannel
+		where ID = #{id,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from RatioChannel
+		where ID = #{id,jdbcType=VARCHAR}
+	</delete>
+	<delete id="deleteByChannelID" parameterType="java.lang.String">
+		delete from RatioChannel
+		where ChannelID = #{channelid,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.gary.operation.domain.Ratiochannel">
+		insert into RatioChannel (ID, ChannelID, DeveloperID,
+		Ratio)
+		values (#{id,jdbcType=VARCHAR}, #{channelid,jdbcType=VARCHAR},
+		#{developerid,jdbcType=VARCHAR},
+		#{ratio,jdbcType=DECIMAL})
+	</insert>
+	<insert id="insertSelective" parameterType="com.gary.operation.domain.Ratiochannel">
+		insert into RatioChannel
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID,
+			</if>
+			<if test="channelid != null">
+				ChannelID,
+			</if>
+			<if test="developerid != null">
+				DeveloperID,
+			</if>
+			<if test="ratio != null">
+				Ratio,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="channelid != null">
+				#{channelid,jdbcType=VARCHAR},
+			</if>
+			<if test="developerid != null">
+				#{developerid,jdbcType=VARCHAR},
+			</if>
+			<if test="ratio != null">
+				#{ratio,jdbcType=DECIMAL},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.gary.operation.domain.Ratiochannel">
+		update RatioChannel
+		<set>
+			<if test="channelid != null">
+				ChannelID = #{channelid,jdbcType=VARCHAR},
+			</if>
+			<if test="developerid != null">
+				DeveloperID = #{developerid,jdbcType=VARCHAR},
+			</if>
+			<if test="ratio != null">
+				Ratio = #{ratio,jdbcType=DECIMAL},
+			</if>
+		</set>
+		where ID = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.gary.operation.domain.Ratiochannel">
+		update RatioChannel
+		set ChannelID = #{channelid,jdbcType=VARCHAR},
+		DeveloperID = #{developerid,jdbcType=VARCHAR},
+		Ratio = #{ratio,jdbcType=DECIMAL}
+		where ID = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gary.operation.mapper.PartnerDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.gary.operation.domain.PartnerDetail" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="PCatalog" property="pcatalog" jdbcType="VARCHAR" />
+    <result column="TaxCode" property="taxcode" jdbcType="VARCHAR" />
+    <result column="Country" property="country" jdbcType="VARCHAR" />
+    <result column="Province" property="province" jdbcType="VARCHAR" />
+    <result column="City" property="city" jdbcType="VARCHAR" />
+    <result column="Address" property="address" jdbcType="VARCHAR" />
+    <result column="Address1" property="address1" jdbcType="VARCHAR" />
+    <result column="Address2" property="address2" jdbcType="VARCHAR" />
+    <result column="Related" property="related" jdbcType="BIT" />
+    <result column="BankProvince" property="bankprovince" jdbcType="VARCHAR" />
+    <result column="BankCity" property="bankcity" jdbcType="VARCHAR" />
+    <result column="BankName" property="bankname" jdbcType="VARCHAR" />
+    <result column="BankBranch" property="bankbranch" jdbcType="VARCHAR" />
+    <result column="BankAccount" property="bankaccount" jdbcType="VARCHAR" />
+    <result column="BankAccountName" property="bankaccountname" jdbcType="VARCHAR" />
+    <result column="BankMidCode" property="bankmidcode" jdbcType="VARCHAR" />
+    <result column="BankRecivedCode" property="bankrecivedcode" jdbcType="VARCHAR" />
+    <result column="BankCNAPS" property="bankcnaps" jdbcType="VARCHAR" />
+    <result column="BillType" property="billtype" jdbcType="VARCHAR" />
+    <result column="BillCurrency" property="billcurrency" jdbcType="VARCHAR" />
+    <result column="BillCurrency2" property="billcurrency2" jdbcType="VARCHAR" />
+    <result column="BillPayGroup" property="billpaygroup" jdbcType="VARCHAR" />
+    <result column="BillCondition" property="billcondition" jdbcType="VARCHAR" />
+    <result column="BillMatch" property="billmatch" jdbcType="VARCHAR" />
+    <result column="BillAutoTyp" property="billautotyp" jdbcType="VARCHAR" />
+    <result column="BillAutoPayment" property="billautopayment" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, PCatalog, TaxCode, Country, Province, City, Address, Address1, Address2, Related, 
+    BankProvince, BankCity, BankName, BankBranch, BankAccount, BankAccountName, BankMidCode, 
+    BankRecivedCode, BankCNAPS, BillType, BillCurrency, BillCurrency2, BillPayGroup, 
+    BillCondition, BillMatch, BillAutoTyp, BillAutoPayment
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from PARTNER_DETAIL
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from PARTNER_DETAIL
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gary.operation.domain.PartnerDetail" >
+    insert into PARTNER_DETAIL (ID, PCatalog, TaxCode, 
+      Country, Province, City, 
+      Address, Address1, Address2, 
+      Related, BankProvince, BankCity, 
+      BankName, BankBranch, BankAccount, 
+      BankAccountName, BankMidCode, BankRecivedCode, 
+      BankCNAPS, BillType, BillCurrency, 
+      BillCurrency2, BillPayGroup, BillCondition, 
+      BillMatch, BillAutoTyp, BillAutoPayment
+      )
+    values (#{id,jdbcType=VARCHAR}, #{pcatalog,jdbcType=VARCHAR}, #{taxcode,jdbcType=VARCHAR}, 
+      #{country,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{address1,jdbcType=VARCHAR}, #{address2,jdbcType=VARCHAR}, 
+      #{related,jdbcType=BIT}, #{bankprovince,jdbcType=VARCHAR}, #{bankcity,jdbcType=VARCHAR}, 
+      #{bankname,jdbcType=VARCHAR}, #{bankbranch,jdbcType=VARCHAR}, #{bankaccount,jdbcType=VARCHAR}, 
+      #{bankaccountname,jdbcType=VARCHAR}, #{bankmidcode,jdbcType=VARCHAR}, #{bankrecivedcode,jdbcType=VARCHAR}, 
+      #{bankcnaps,jdbcType=VARCHAR}, #{billtype,jdbcType=VARCHAR}, #{billcurrency,jdbcType=VARCHAR}, 
+      #{billcurrency2,jdbcType=VARCHAR}, #{billpaygroup,jdbcType=VARCHAR}, #{billcondition,jdbcType=VARCHAR}, 
+      #{billmatch,jdbcType=VARCHAR}, #{billautotyp,jdbcType=VARCHAR}, #{billautopayment,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.gary.operation.domain.PartnerDetail" >
+    insert into PARTNER_DETAIL
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="pcatalog != null" >
+        PCatalog,
+      </if>
+      <if test="taxcode != null" >
+        TaxCode,
+      </if>
+      <if test="country != null" >
+        Country,
+      </if>
+      <if test="province != null" >
+        Province,
+      </if>
+      <if test="city != null" >
+        City,
+      </if>
+      <if test="address != null" >
+        Address,
+      </if>
+      <if test="address1 != null" >
+        Address1,
+      </if>
+      <if test="address2 != null" >
+        Address2,
+      </if>
+      <if test="related != null" >
+        Related,
+      </if>
+      <if test="bankprovince != null" >
+        BankProvince,
+      </if>
+      <if test="bankcity != null" >
+        BankCity,
+      </if>
+      <if test="bankname != null" >
+        BankName,
+      </if>
+      <if test="bankbranch != null" >
+        BankBranch,
+      </if>
+      <if test="bankaccount != null" >
+        BankAccount,
+      </if>
+      <if test="bankaccountname != null" >
+        BankAccountName,
+      </if>
+      <if test="bankmidcode != null" >
+        BankMidCode,
+      </if>
+      <if test="bankrecivedcode != null" >
+        BankRecivedCode,
+      </if>
+      <if test="bankcnaps != null" >
+        BankCNAPS,
+      </if>
+      <if test="billtype != null" >
+        BillType,
+      </if>
+      <if test="billcurrency != null" >
+        BillCurrency,
+      </if>
+      <if test="billcurrency2 != null" >
+        BillCurrency2,
+      </if>
+      <if test="billpaygroup != null" >
+        BillPayGroup,
+      </if>
+      <if test="billcondition != null" >
+        BillCondition,
+      </if>
+      <if test="billmatch != null" >
+        BillMatch,
+      </if>
+      <if test="billautotyp != null" >
+        BillAutoTyp,
+      </if>
+      <if test="billautopayment != null" >
+        BillAutoPayment,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="pcatalog != null" >
+        #{pcatalog,jdbcType=VARCHAR},
+      </if>
+      <if test="taxcode != null" >
+        #{taxcode,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null" >
+        #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="address1 != null" >
+        #{address1,jdbcType=VARCHAR},
+      </if>
+      <if test="address2 != null" >
+        #{address2,jdbcType=VARCHAR},
+      </if>
+      <if test="related != null" >
+        #{related,jdbcType=BIT},
+      </if>
+      <if test="bankprovince != null" >
+        #{bankprovince,jdbcType=VARCHAR},
+      </if>
+      <if test="bankcity != null" >
+        #{bankcity,jdbcType=VARCHAR},
+      </if>
+      <if test="bankname != null" >
+        #{bankname,jdbcType=VARCHAR},
+      </if>
+      <if test="bankbranch != null" >
+        #{bankbranch,jdbcType=VARCHAR},
+      </if>
+      <if test="bankaccount != null" >
+        #{bankaccount,jdbcType=VARCHAR},
+      </if>
+      <if test="bankaccountname != null" >
+        #{bankaccountname,jdbcType=VARCHAR},
+      </if>
+      <if test="bankmidcode != null" >
+        #{bankmidcode,jdbcType=VARCHAR},
+      </if>
+      <if test="bankrecivedcode != null" >
+        #{bankrecivedcode,jdbcType=VARCHAR},
+      </if>
+      <if test="bankcnaps != null" >
+        #{bankcnaps,jdbcType=VARCHAR},
+      </if>
+      <if test="billtype != null" >
+        #{billtype,jdbcType=VARCHAR},
+      </if>
+      <if test="billcurrency != null" >
+        #{billcurrency,jdbcType=VARCHAR},
+      </if>
+      <if test="billcurrency2 != null" >
+        #{billcurrency2,jdbcType=VARCHAR},
+      </if>
+      <if test="billpaygroup != null" >
+        #{billpaygroup,jdbcType=VARCHAR},
+      </if>
+      <if test="billcondition != null" >
+        #{billcondition,jdbcType=VARCHAR},
+      </if>
+      <if test="billmatch != null" >
+        #{billmatch,jdbcType=VARCHAR},
+      </if>
+      <if test="billautotyp != null" >
+        #{billautotyp,jdbcType=VARCHAR},
+      </if>
+      <if test="billautopayment != null" >
+        #{billautopayment,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gary.operation.domain.PartnerDetail" >
+    update PARTNER_DETAIL
+    <set >
+      <if test="pcatalog != null" >
+        PCatalog = #{pcatalog,jdbcType=VARCHAR},
+      </if>
+      <if test="taxcode != null" >
+        TaxCode = #{taxcode,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null" >
+        Country = #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        Province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        City = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        Address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="address1 != null" >
+        Address1 = #{address1,jdbcType=VARCHAR},
+      </if>
+      <if test="address2 != null" >
+        Address2 = #{address2,jdbcType=VARCHAR},
+      </if>
+      <if test="related != null" >
+        Related = #{related,jdbcType=BIT},
+      </if>
+      <if test="bankprovince != null" >
+        BankProvince = #{bankprovince,jdbcType=VARCHAR},
+      </if>
+      <if test="bankcity != null" >
+        BankCity = #{bankcity,jdbcType=VARCHAR},
+      </if>
+      <if test="bankname != null" >
+        BankName = #{bankname,jdbcType=VARCHAR},
+      </if>
+      <if test="bankbranch != null" >
+        BankBranch = #{bankbranch,jdbcType=VARCHAR},
+      </if>
+      <if test="bankaccount != null" >
+        BankAccount = #{bankaccount,jdbcType=VARCHAR},
+      </if>
+      <if test="bankaccountname != null" >
+        BankAccountName = #{bankaccountname,jdbcType=VARCHAR},
+      </if>
+      <if test="bankmidcode != null" >
+        BankMidCode = #{bankmidcode,jdbcType=VARCHAR},
+      </if>
+      <if test="bankrecivedcode != null" >
+        BankRecivedCode = #{bankrecivedcode,jdbcType=VARCHAR},
+      </if>
+      <if test="bankcnaps != null" >
+        BankCNAPS = #{bankcnaps,jdbcType=VARCHAR},
+      </if>
+      <if test="billtype != null" >
+        BillType = #{billtype,jdbcType=VARCHAR},
+      </if>
+      <if test="billcurrency != null" >
+        BillCurrency = #{billcurrency,jdbcType=VARCHAR},
+      </if>
+      <if test="billcurrency2 != null" >
+        BillCurrency2 = #{billcurrency2,jdbcType=VARCHAR},
+      </if>
+      <if test="billpaygroup != null" >
+        BillPayGroup = #{billpaygroup,jdbcType=VARCHAR},
+      </if>
+      <if test="billcondition != null" >
+        BillCondition = #{billcondition,jdbcType=VARCHAR},
+      </if>
+      <if test="billmatch != null" >
+        BillMatch = #{billmatch,jdbcType=VARCHAR},
+      </if>
+      <if test="billautotyp != null" >
+        BillAutoTyp = #{billautotyp,jdbcType=VARCHAR},
+      </if>
+      <if test="billautopayment != null" >
+        BillAutoPayment = #{billautopayment,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gary.operation.domain.PartnerDetail" >
+    update PARTNER_DETAIL
+    set PCatalog = #{pcatalog,jdbcType=VARCHAR},
+      TaxCode = #{taxcode,jdbcType=VARCHAR},
+      Country = #{country,jdbcType=VARCHAR},
+      Province = #{province,jdbcType=VARCHAR},
+      City = #{city,jdbcType=VARCHAR},
+      Address = #{address,jdbcType=VARCHAR},
+      Address1 = #{address1,jdbcType=VARCHAR},
+      Address2 = #{address2,jdbcType=VARCHAR},
+      Related = #{related,jdbcType=BIT},
+      BankProvince = #{bankprovince,jdbcType=VARCHAR},
+      BankCity = #{bankcity,jdbcType=VARCHAR},
+      BankName = #{bankname,jdbcType=VARCHAR},
+      BankBranch = #{bankbranch,jdbcType=VARCHAR},
+      BankAccount = #{bankaccount,jdbcType=VARCHAR},
+      BankAccountName = #{bankaccountname,jdbcType=VARCHAR},
+      BankMidCode = #{bankmidcode,jdbcType=VARCHAR},
+      BankRecivedCode = #{bankrecivedcode,jdbcType=VARCHAR},
+      BankCNAPS = #{bankcnaps,jdbcType=VARCHAR},
+      BillType = #{billtype,jdbcType=VARCHAR},
+      BillCurrency = #{billcurrency,jdbcType=VARCHAR},
+      BillCurrency2 = #{billcurrency2,jdbcType=VARCHAR},
+      BillPayGroup = #{billpaygroup,jdbcType=VARCHAR},
+      BillCondition = #{billcondition,jdbcType=VARCHAR},
+      BillMatch = #{billmatch,jdbcType=VARCHAR},
+      BillAutoTyp = #{billautotyp,jdbcType=VARCHAR},
+      BillAutoPayment = #{billautopayment,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

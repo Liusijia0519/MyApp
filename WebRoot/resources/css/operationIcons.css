@@ -1,0 +1,165 @@
+/*---------------------------系统按钮样式ICON图标开始----------------------------*/
+
+/* 外面圆圈里面.xls图标 */
+.action_excel2_24 {
+	background-image:url(../images/icon24/20140616102347402_easyicon_net_24.png);
+}
+
+/* 保存的图标 */
+.action_save_24 {
+	background-image:url(../images/icon24/20130831015825181_24.png);
+}
+
+/* 打印机的图标  */
+.action_print_24 {
+	background-image:url(../images/icon24/20130831021456200_24.png);
+}
+
+/* 一支铅笔的图标 */
+.action_eidt_24 {
+	background-image:url(../images/icon24/20130831022137772_24.png);
+}
+
+/* 一个文件加一只笔的图标 */
+.action_eidtfile_24 {
+	background-image:url(../images/icon24/20130908115736128_24.png);
+}
+
+/* 放大镜图标 */
+.action_search_24 {
+	background-image:url(../images/icon24/20130831022350955_24.png);
+}
+
+/* 俩个文件的图标 */
+.action_detail_24 {
+	background-image:url(../images/icon24/20130831022523972_24.png);
+}
+
+/* 红色X图标 */
+.action_delete_24 {
+	background-image:url(../images/icon24/20130831022642952_24.png);
+}
+
+/* 带加号的电脑图标 */
+.action_computer_24 {
+	background-image:url(../images/icon24/20130831022940242_24.png);
+}
+
+/* 光盘图标 */
+.action_disk_24 {
+	background-image:url(../images/icon24/20130831023307801_24.png);
+}
+
+/* 刷新的图表 */
+.action_refresh_24 {
+	background-image:url(../images/icon24/20130901035549840_24.png);
+}
+
+/* 回收站的图标 */
+.action_trash_24 {
+	background-image:url(../images/icon24/20130901040308305_24.png);
+}
+
+/* 绿色对号的图标 */
+.action_confirm_24 {
+	background-image:url(../images/icon24/20130902102217963_24.png);
+}
+
+/* 绿色加号的图标 */
+.action_add_24 {
+	background-image:url(../images/icon24/20130901035850946_24.png);
+}
+
+/*excel图标*/
+.action_excel_24 {
+	background-image:url(../images/icon24/20130902112532111_24.png);
+}
+
+/*新增用户图标*/
+.action_addUser_24 {
+	background-image:url(../images/icon24/2013081502545746_24.gif);
+}
+
+/*钥匙+刷新*/
+.action_keyreset_24 {
+	background-image:url(../images/icon24/20130904040303204_24.png);
+}
+
+/*紫色锁+红叉*/
+.action_violetlock_24 {
+	background-image:url(../images/icon24/20130904085419760_24.png);
+}
+
+/*紫色解除锁*/
+.action_violetunlock_24 {
+	background-image:url(../images/icon24/20130904091332433_24.png);
+}
+
+/*一页纸图标*/
+.action_updateRecord_24 {
+	background-image:url(../images/icon24/20130908044809194_24.png);
+}
+
+/*感叹号*/
+.action_exclamatory_24 {
+	background-image:url(../images/icon24/20130910022804853_24.png);
+}
+
+/*手*/
+.action-hand-24 {
+	background-image:url(../images/icon24/20130916103650112_24.png);
+}
+
+/*计算器*/
+.action-calculator-24 {
+	background-image:url(../images/icon24/20131017011005213_24.png);
+}
+
+/*圆圈*/
+.action-empty-24 {
+	background-image:url(../images/icon24/new-view-refresh.png);
+}
+
+/*已发送*/
+.action-send-24 {
+	background-image:url(../images/icon24/20140110101618511_easyicon_net_24.png);
+}
+
+/*草稿箱*/
+.action-manuscript-24 {
+	background-image:url(../images/icon24/20140110102004215_easyicon_net_24.png);
+}
+
+/*已接收*/
+.action-receive-24 {
+	background-image:url(../images/icon24/20140110102210304_easyicon_net_24.png);
+}
+
+/*和平信息*/
+.action-hpxx-24 {
+	background-image:url(../images/icon24/20140110104003743_easyicon_net_24.png);
+}
+
+/*重要情况报告*/
+.action-zybg-24 {
+	background-image:url(../images/icon24/20140110104059864_easyicon_net_24.png);
+}
+
+/*上报省市信息*/
+.action-sbxx-24 {
+	background-image:url(../images/icon24/20140110104139209_easyicon_net_24.png);
+}
+
+/*其他信息*/
+.action-qtxx-24 {
+	background-image:url(../images/icon24/20140110105012591_easyicon_net_24.png);
+}
+
+/*处理意见*/
+.action-clyj-24 {
+	background-image:url(../images/icon24/20140127093930948_easyicon_net_24.png);
+}
+/*齿轮*/
+.action-cog-16 {
+	background-image:url(../images/icon16/cog.png);
+}

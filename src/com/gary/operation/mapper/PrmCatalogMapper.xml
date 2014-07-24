@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gary.operation.mapper.PrmCatalogMapper">
+	<resultMap id="BaseResultMap" type="com.gary.operation.domain.PrmCatalog">
+		<id column="ID" property="id" jdbcType="VARCHAR" />
+		<result column="Name" property="name" jdbcType="VARCHAR" />
+		<result column="AmountReceivable" property="amountreceivable"
+			jdbcType="DECIMAL" />
+		<result column="AmountReceived" property="amountreceived"
+			jdbcType="DECIMAL" />
+		<result column="CreateDate" property="createdate" jdbcType="VARCHAR" />
+		<result column="CreateUser" property="createuser" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		ID, Name, AmountReceivable, AmountReceived, CreateDate,
+		CreateUser
+	</sql>
+	<!-- 查询账期,作为combo -->
+	<select id="getZhangqiCombo" resultType='hashmap'>
+		SELECT [Name] as zhangqi FROM [PRM_CATALOG] order by name desc
+	</select>
+	<select id="select" resultType="PrmCatalog">
+		SELECT * FROM Prm_Catalog
+		<where>
+			<if test="name != null">
+				AND Name like '%${name}%'
+			</if>
+			<if test="amountreceivable != null">
+				AND AmountReceivable =
+				#{amountreceivable,jdbcType=DECIMAL}
+			</if>
+			<if test="amountreceived != null">
+				AND AmountReceived = #{amountreceived,jdbcType=DECIMAL}
+			</if>
+			<if test="createdate != null">
+				AND CreateDate = #{createdate,jdbcType=VARCHAR}
+			</if>
+			<if test="createuser != null">
+				AND CreateUser = #{createuser,jdbcType=VARCHAR}
+			</if>
+		</where>
+		ORDER BY CreateDate DESC
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from PRM_CATALOG
+		where ID = #{id,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		PRM_CATALOG
+		where ID = #{id,jdbcType=VARCHAR}
+	</delete>
+	<delete id="deleteByZhangqi" parameterType="java.lang.String">
+		delete from
+		PRM_CATALOG
+		where name = #{zhangqi,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.gary.operation.domain.PrmCatalog">
+		insert into PRM_CATALOG (ID,
+		Name, AmountReceivable,
+		AmountReceived, CreateDate, CreateUser
+		)
+		values
+		(#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+		#{amountreceivable,jdbcType=DECIMAL},
+		#{amountreceived,jdbcType=DECIMAL}, #{createdate,jdbcType=VARCHAR},
+		#{createuser,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.gary.operation.domain.PrmCatalog">
+		insert into PRM_CATALOG
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID,
+			</if>
+			<if test="name != null">
+				Name,
+			</if>
+			<if test="amountreceivable != null">
+				AmountReceivable,
+			</if>
+			<if test="amountreceived != null">
+				AmountReceived,
+			</if>
+			<if test="createdate != null">
+				CreateDate,
+			</if>
+			<if test="createuser != null">
+				CreateUser,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="amountreceivable != null">
+				#{amountreceivable,jdbcType=DECIMAL},
+			</if>
+			<if test="amountreceived != null">
+				#{amountreceived,jdbcType=DECIMAL},
+			</if>
+			<if test="createdate != null">
+				#{createdate,jdbcType=VARCHAR},
+			</if>
+			<if test="createuser != null">
+				#{createuser,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.gary.operation.domain.PrmCatalog">
+		update PRM_CATALOG
+		<set>
+			<if test="name != null">
+				Name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="amountreceivable != null">
+				AmountReceivable = #{amountreceivable,jdbcType=DECIMAL},
+			</if>
+			<if test="amountreceived != null">
+				AmountReceived = #{amountreceived,jdbcType=DECIMAL},
+			</if>
+			<if test="createdate != null">
+				CreateDate = #{createdate,jdbcType=VARCHAR},
+			</if>
+			<if test="createuser != null">
+				CreateUser = #{createuser,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where ID = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.gary.operation.domain.PrmCatalog">
+		update PRM_CATALOG
+		set Name = #{name,jdbcType=VARCHAR},
+		AmountReceivable =
+		#{amountreceivable,jdbcType=DECIMAL},
+		AmountReceived =
+		#{amountreceived,jdbcType=DECIMAL},
+		CreateDate =
+		#{createdate,jdbcType=VARCHAR},
+		CreateUser =
+		#{createuser,jdbcType=VARCHAR}
+		where ID = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

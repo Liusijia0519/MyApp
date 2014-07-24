@@ -1,0 +1,70 @@
+#system_loading-mask {
+	background-color:white;
+	height:100%;
+	position:absolute;
+	left:0;
+	top:0;
+	width:100%;
+	z-index:20000;
+}
+	    
+#system_loading {
+	height:auto;
+	position:absolute;
+	left:40%;
+	top:40%;
+	padding:2px;
+	z-index:20001;
+ }
+ 
+#system_loading .loading-indicator{
+	background:white;
+	color:#444;
+	font:bold 13px Helvetica, Arial, sans-serif;
+	height:auto;
+	margin:0;
+	padding:10px;
+}
+
+.x-message-box .ext-mb-download {
+    background: url("../images/other/download.gif") no-repeat scroll 6px 0px transparent;
+    height: 52px!important;
+}
+
+/* 工作区背景 */
+.system_content-panel-body {
+	background-image:url(../images/other/square.gif);
+}
+
+/*---------------------------系统工作空间样式----------------------------*/
+
+/* 系统LOGO */
+.system_homo {
+	background-image:url(../images/other/2013081502545747_24.png);
+}
+
+/* 系统登录用户  */
+.system_user {
+	background-image:url(../images/other/2014062409383689_easyicon_net_24.png);
+}
+
+/* 系统修改密码  */
+.system_password {
+	background-image:url(../images/other/2013081707503329_24.png);
+}
+
+/* 退出系统  */
+.system_exit {
+	background-image:url(../images/other/20130818024944647_24.png);
+}
+
+/* 部门  */
+.system_department {
+	background-image:url(../images/other/2014062409484312_easyicon_net_24.png);
+}
+
+/* wo*/
+.system_wo {
+	background-image:url(../images/other/wo.png);
+}
+

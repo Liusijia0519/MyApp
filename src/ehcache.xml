@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
+         updateCheck="false" monitoring="autodetect"
+         dynamicConfig="true">
+
+    <diskStore path="java.io.tmpdir"/>
+	
+	<defaultCache
+        maxElementsInMemory="10000"
+        eternal="false"
+        timeToIdleSeconds="120"
+        timeToLiveSeconds="120"
+        maxElementsOnDisk="10000000"
+        diskExpiryThreadIntervalSeconds="120"
+        memoryStoreEvictionPolicy="LRU">
+        <persistence strategy="localTempSwap"/>
+    </defaultCache>
+    
+    <!-- 用户菜单缓存策略 -->
+	<cache 
+		name="UserMenuCache"
+		maxElementsInMemory="100"
+        eternal="false"
+        timeToIdleSeconds="1800"
+        timeToLiveSeconds="1800"
+        memoryStoreEvictionPolicy="LRU"
+	></cache>
+	
+	<!-- 系统权限缓存 -->	
+	<cache 
+		name="SystemActionCache"
+		maxElementsInMemory="1"
+        eternal="true"
+    ></cache>	
+	
+	<!-- 系统菜单缓存 -->	
+	<cache 
+		name="SystemMenuCache"
+		maxElementsInMemory="5"
+        eternal="true"
+    ></cache>
+    
+	<!-- 系统字典缓存策略 -->	
+	<cache 
+		name="SystemDictionaryCache"
+		maxElementsInMemory="50"
+        eternal="true"
+    ></cache>
+    <cache 
+		name="SystemDictionaryTreeCache"
+		maxElementsInMemory="50"
+        eternal="true"
+    ></cache>
+    
+    
+   	<!-- 组织机构缓存策略 -->	
+	<cache 
+		name="SystemDepartment"
+		maxElementsInMemory="50"
+        eternal="true"
+    ></cache>
+    
+    <!-- WebCache -->
+    <cache name="SimplePageCachingFilter"
+	  maxEntriesLocalHeap="10"
+	  eternal="false"
+	  memoryStoreEvictionPolicy="LRU"
+	  timeToIdleSeconds="600"
+	  timeToLiveSeconds="3600">
+	</cache>
+</ehcache>

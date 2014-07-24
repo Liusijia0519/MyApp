@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gary.operation.mapper.SystemFileMapper" >
+  <resultMap id="BaseResultMap" type="com.gary.operation.domain.SystemFile" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="FileID" property="fileid" jdbcType="VARCHAR" />
+    <result column="FileName" property="filename" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.gary.operation.domain.SystemFile" extends="BaseResultMap" >
+    <result column="FileByte" property="filebyte" jdbcType="BLOB" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, FileID, FileName
+  </sql>
+  <sql id="Blob_Column_List" >
+    FileByte
+  </sql>
+  	<select id="select" resultType="SystemFile">
+		SELECT ID,FileID,FileName FROM System_File
+		<where>
+			<if test="fileid != null" >
+		        AND FileID = #{fileid,jdbcType=VARCHAR}
+		      </if>
+		      <if test="filename != null" >
+		        AND FileName = #{filename,jdbcType=VARCHAR}
+		      </if>
+		</where>
+	</select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from System_File
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from System_File
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gary.operation.domain.SystemFile" >
+    insert into System_File (ID, FileID, FileName, 
+      FileByte)
+    values (#{id,jdbcType=VARCHAR}, #{fileid,jdbcType=VARCHAR}, #{filename,jdbcType=VARCHAR}, 
+      #{filebyte,jdbcType=BLOB})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gary.operation.domain.SystemFile" >
+    insert into System_File
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="fileid != null" >
+        FileID,
+      </if>
+      <if test="filename != null" >
+        FileName,
+      </if>
+      <if test="filebyte != null" >
+        FileByte,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="fileid != null" >
+        #{fileid,jdbcType=VARCHAR},
+      </if>
+      <if test="filename != null" >
+        #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="filebyte != null" >
+        #{filebyte,jdbcType=BLOB},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gary.operation.domain.SystemFile" >
+    update System_File
+    <set >
+      <if test="fileid != null" >
+        FileID = #{fileid,jdbcType=VARCHAR},
+      </if>
+      <if test="filename != null" >
+        FileName = #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="filebyte != null" >
+        FileByte = #{filebyte,jdbcType=BLOB},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.gary.operation.domain.SystemFile" >
+    update System_File
+    set FileID = #{fileid,jdbcType=VARCHAR},
+      FileName = #{filename,jdbcType=VARCHAR},
+      FileByte = #{filebyte,jdbcType=BLOB}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gary.operation.domain.SystemFile" >
+    update System_File
+    set FileID = #{fileid,jdbcType=VARCHAR},
+      FileName = #{filename,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
