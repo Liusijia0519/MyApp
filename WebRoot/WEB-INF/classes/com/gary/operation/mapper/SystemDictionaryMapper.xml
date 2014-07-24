@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gary.operation.mapper.SystemDictionaryMapper">
+	
+	<select id="selectDictionaryByCode" resultType="SystemDictionary"
+		parameterType="string">
+		SELECT * FROM System_Dictionary
+		WHERE dictionaryTypeCode = #{dictionaryTypeCode}
+		ORDER BY [index]
+	</select>
+	
+	<select id="selectAvailablDictionaryByCode" resultType="SystemDictionary" parameterType="string">
+		SELECT * FROM System_Dictionary
+		WHERE dictionaryTypeCode = #{dictionaryTypeCode} AND availabl = 1 
+		ORDER BY [index]
+	</select>
+	
+	<insert id="insertOrUpdateDictionary" parameterType="SystemDictionary">
+		IF NOT EXISTS (SELECT
+		id FROM System_Dictionary WHERE id = #{id})
+		BEGIN
+			INSERT INTO dbo.System_Dictionary
+			( id ,
+			dictionaryTypeCode ,
+			text ,
+			parentId ,
+			[index] ,
+			availabl ,
+			leaf
+			)
+			VALUES (#{id},
+			#{dictionaryTypeCode},
+			#{text},
+			#{parentId},
+			#{index},
+			#{availabl},
+			#{leaf})
+		END
+		ELSE
+		BEGIN
+			UPDATE dbo.System_Dictionary SET text = #{text}, parentId = #{parentId},
+			[index] = #{index},availabl = #{availabl},leaf = #{leaf}
+			WHERE id = #{id}
+		END
+	</insert>
+</mapper>

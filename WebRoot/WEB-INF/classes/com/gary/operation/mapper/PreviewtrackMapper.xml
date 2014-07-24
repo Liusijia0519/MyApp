@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gary.operation.mapper.PreviewtrackMapper">
+	<resultMap id="BaseResultMap" type="com.gary.operation.domain.Previewtrack">
+		<id column="ID" property="id" jdbcType="VARCHAR" />
+		<result column="Name" property="name" jdbcType="VARCHAR" />
+		<result column="DeveloperID" property="developerid"
+			jdbcType="VARCHAR" />
+		<result column="DeveloperName" property="developername"
+			jdbcType="VARCHAR" />
+		<result column="TrackStatus" property="trackstatus" jdbcType="VARCHAR" />
+		<result column="TrackDescription" property="trackdescription"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		ID, Name,DeveloperID ,DeveloperName, TrackStatus, TrackDescription
+	</sql>
+	<select id="getZhangqiComboByTrack" resultType="hashmap">
+		select Name as zhangqi from Previewtrack group by Name order by Name desc 
+	</select>
+		<!-- 根据id 查询一条数据 导出excel用  返回map -->
+	<select id="getTrackMapById" resultType="hashmap"
+		parameterType="java.lang.String">
+		SELECT  [ID],[Name],[DeveloperName]FROM [PreviewTrack] where ID=#{trackId,jdbcType=VARCHAR}
+	</select>
+	<select id="select" resultType="Previewtrack">
+		SELECT * FROM Previewtrack
+		<where>
+			<if test="name != null">
+				AND Name = #{name,jdbcType=VARCHAR}
+			</if>
+			<if test="developername != null">
+				AND DeveloperName = #{developername,jdbcType=VARCHAR}
+			</if>
+			<if test="developerid != null">
+				AND DeveloperID = #{developerid,jdbcType=VARCHAR}
+			</if>
+			<if test="trackstatusin != null">
+				AND TrackStatus IN (${trackstatusin})
+					<!-- <foreach item="item" index="index" collection="trackstatusin" open="(" separator="," close=")">  
+					  	#{item}  
+					</foreach>  -->
+			</if>
+			<if test="trackstatus != null">
+				AND TrackStatus = #{trackstatus,jdbcType=VARCHAR}
+			</if>
+			<if test="trackdescription != null">
+				AND TrackDescription =
+				#{trackdescription,jdbcType=VARCHAR}
+			</if>
+		</where>
+		ORDER BY Name DESC
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from PreviewTrack
+		where ID = #{id,jdbcType=VARCHAR}
+	</select>
+	<!-- 返回存在该账期的行数,用来判断是否要获取账期 -->
+	<select id="getCountByZhangqi" resultType="java.lang.Integer"
+		parameterType="java.lang.String">
+		SELECT COUNT(Name) 
+		FROM [PreviewTrack] where Name=#{zhangqi,jdbcType=VARCHAR}
+	</select><!-- getTrackMapById -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		PreviewTrack
+		where ID = #{id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.gary.operation.domain.Previewtrack">
+		insert into PreviewTrack (ID,
+		Name, DeveloperID,DeveloperName,
+		TrackStatus, TrackDescription)
+		values
+		(#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+		#{developerid,jdbcType=VARCHAR},
+		#{developername,jdbcType=VARCHAR},
+		#{trackstatus,jdbcType=VARCHAR},
+		#{trackdescription,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.gary.operation.domain.Previewtrack">
+		insert into PreviewTrack
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID,
+			</if>
+			<if test="name != null">
+				Name,
+			</if>
+			<if test="developerid != null">
+				DeveloperID,
+			</if>
+			<if test="developername != null">
+				DeveloperName,
+			</if>
+			<if test="trackstatus != null">
+				TrackStatus,
+			</if>
+			<if test="trackdescription != null">
+				TrackDescription,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="developerid != null">
+				#{developerid,jdbcType=VARCHAR},
+			</if>
+			<if test="developername != null">
+				#{developername,jdbcType=VARCHAR},
+			</if>
+			<if test="trackstatus != null">
+				#{trackstatus,jdbcType=VARCHAR},
+			</if>
+			<if test="trackdescription != null">
+				#{trackdescription,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.gary.operation.domain.Previewtrack">
+		update PreviewTrack
+		<set>
+			<if test="name != null">
+				Name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="developerid != null">
+				DeveloperID = #{developerid,jdbcType=VARCHAR},
+			</if>
+			<if test="developername != null">
+				DeveloperName = #{developername,jdbcType=VARCHAR},
+			</if>
+			<if test="trackstatus != null">
+				TrackStatus = #{trackstatus,jdbcType=VARCHAR},
+			</if>
+			<if test="trackdescription != null">
+				TrackDescription = #{trackdescription,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where ID = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.gary.operation.domain.Previewtrack">
+		update
+		PreviewTrack
+		set Name = #{name,jdbcType=VARCHAR},
+		DeveloperID =
+		#{developerid,jdbcType=VARCHAR},
+		DeveloperName =
+		#{developername,jdbcType=VARCHAR},
+		TrackStatus =
+		#{trackstatus,jdbcType=VARCHAR},
+		TrackDescription =
+		#{trackdescription,jdbcType=VARCHAR}
+		where ID = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

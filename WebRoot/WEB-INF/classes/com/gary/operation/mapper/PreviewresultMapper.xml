@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gary.operation.mapper.PreviewresultMapper">
+	<resultMap id="BaseResultMap" type="com.gary.operation.domain.Previewresult">
+		<id column="ID" property="id" jdbcType="VARCHAR" />
+		<result column="PID" property="pid" jdbcType="VARCHAR" />
+		<result column="AppName" property="appname" jdbcType="VARCHAR" />
+		<result column="AmountPLM" property="amountplm" jdbcType="DECIMAL" />
+		<result column="AmountPRM" property="amountprm" jdbcType="DECIMAL" />
+		<result column="AmountRecived" property="amountrecived"
+			jdbcType="DECIMAL" />
+		<result column="AmountReturn" property="amountreturn" jdbcType="DECIMAL" />
+		<result column="AmountDeduct" property="amountdeduct" jdbcType="DECIMAL" />
+		<result column="AmountAddition" property="amountaddition"
+			jdbcType="DECIMAL" />
+		<result column="AmountTotal" property="amounttotal" jdbcType="DECIMAL" />
+		<result column="RatioInner" property="ratioinner" jdbcType="DECIMAL" />
+		<result column="RatioOutter" property="ratiooutter" jdbcType="DECIMAL" />
+		
+		<result column="DeveloperName" property="developername" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		ID, PID, AppName, AmountPLM, AmountPRM, AmountRecived,
+		AmountReturn,
+		AmountDeduct,
+		AmountAddition, AmountTotal, RatioInner,
+		RatioOutter
+	</sql>
+	<!-- 根据trackid外键查询数据 用来excel导出 -->
+	<select id="getResultMapList" resultType="Previewresult"
+		parameterType="java.lang.String">
+		SELECT * FROM [PreviewResult] where PID=#{trackId
+		,jdbcType=VARCHAR}
+	</select>
+	<!-- 根据账期查询所有app的数据,外加开发者姓名,作为导出用 -->
+	<select id="getAllAppMoneyByZhangqi" resultType="Previewresult">
+		SELECT [PreviewResult].*,PreviewTrack.DeveloperName
+  		FROM [PreviewResult] INNER JOIN PreviewTrack ON PreviewResult.PID = PreviewTrack.ID 
+  		WHERE dbo.PreviewTrack.Name = #{zhangqi}
+  		ORDER BY PreviewTrack.DeveloperName
+	</select>
+	<select id="select" resultType="Previewresult">
+		SELECT * FROM Previewresult
+		<where>
+			<if test="pid != null">
+				AND PID = #{pid,jdbcType=VARCHAR}
+			</if>
+			<if test="appname != null">
+				AND AppName = #{appname,jdbcType=VARCHAR}
+			</if>
+			<if test="amountplm != null">
+				AND AmountPLM = #{amountplm,jdbcType=DECIMAL}
+			</if>
+			<if test="amountprm != null">
+				AND AmountPRM = #{amountprm,jdbcType=DECIMAL}
+			</if>
+			<if test="amountrecived != null">
+				AND AmountRecived = #{amountrecived,jdbcType=DECIMAL}
+			</if>
+			<if test="amountreturn != null">
+				AND AmountReturn = #{amountreturn,jdbcType=DECIMAL}
+			</if>
+			<if test="amountdeduct != null">
+				AND AmountDeduct = #{amountdeduct,jdbcType=DECIMAL}
+			</if>
+			<if test="amountaddition != null">
+				AND AmountAddition = #{amountaddition,jdbcType=DECIMAL}
+			</if>
+			<if test="amounttotal != null">
+				AND AmountTotal = #{amounttotal,jdbcType=DECIMAL}
+			</if>
+			<if test="ratioinner != null">
+				AND RatioInner = #{ratioinner,jdbcType=DECIMAL}
+			</if>
+			<if test="ratiooutter != null">
+				RatioOutter = #{ratiooutter,jdbcType=DECIMAL},
+			</if>
+		</where>
+		ORDER BY AppName
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from PreviewResult
+		where ID = #{id,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		PreviewResult
+		where ID = #{id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.gary.operation.domain.Previewresult">
+		insert into PreviewResult (ID,
+		PID, AppName,
+		AmountPLM, AmountPRM, AmountRecived,
+		AmountReturn,
+		AmountDeduct, AmountAddition,
+		AmountTotal, RatioInner, RatioOutter
+		)
+		values (#{id,jdbcType=VARCHAR}, #{pid,jdbcType=VARCHAR},
+		#{appname,jdbcType=VARCHAR},
+		#{amountplm,jdbcType=DECIMAL},
+		#{amountprm,jdbcType=DECIMAL}, #{amountrecived,jdbcType=DECIMAL},
+		#{amountreturn,jdbcType=DECIMAL}, #{amountdeduct,jdbcType=DECIMAL},
+		#{amountaddition,jdbcType=DECIMAL},
+		#{amounttotal,jdbcType=DECIMAL},
+		#{ratioinner,jdbcType=DECIMAL}, #{ratiooutter,jdbcType=DECIMAL}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.gary.operation.domain.Previewresult">
+		insert into PreviewResult
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID,
+			</if>
+			<if test="pid != null">
+				PID,
+			</if>
+			<if test="appname != null">
+				AppName,
+			</if>
+			<if test="amountplm != null">
+				AmountPLM,
+			</if>
+			<if test="amountprm != null">
+				AmountPRM,
+			</if>
+			<if test="amountrecived != null">
+				AmountRecived,
+			</if>
+			<if test="amountreturn != null">
+				AmountReturn,
+			</if>
+			<if test="amountdeduct != null">
+				AmountDeduct,
+			</if>
+			<if test="amountaddition != null">
+				AmountAddition,
+			</if>
+			<if test="amounttotal != null">
+				AmountTotal,
+			</if>
+			<if test="ratioinner != null">
+				RatioInner,
+			</if>
+			<if test="ratiooutter != null">
+				RatioOutter,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="pid != null">
+				#{pid,jdbcType=VARCHAR},
+			</if>
+			<if test="appname != null">
+				#{appname,jdbcType=VARCHAR},
+			</if>
+			<if test="amountplm != null">
+				#{amountplm,jdbcType=DECIMAL},
+			</if>
+			<if test="amountprm != null">
+				#{amountprm,jdbcType=DECIMAL},
+			</if>
+			<if test="amountrecived != null">
+				#{amountrecived,jdbcType=DECIMAL},
+			</if>
+			<if test="amountreturn != null">
+				#{amountreturn,jdbcType=DECIMAL},
+			</if>
+			<if test="amountdeduct != null">
+				#{amountdeduct,jdbcType=DECIMAL},
+			</if>
+			<if test="amountaddition != null">
+				#{amountaddition,jdbcType=DECIMAL},
+			</if>
+			<if test="amounttotal != null">
+				#{amounttotal,jdbcType=DECIMAL},
+			</if>
+			<if test="ratioinner != null">
+				#{ratioinner,jdbcType=DECIMAL},
+			</if>
+			<if test="ratiooutter != null">
+				#{ratiooutter,jdbcType=DECIMAL},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.gary.operation.domain.Previewresult">
+		update PreviewResult
+		<set>
+			<if test="pid != null">
+				PID = #{pid,jdbcType=VARCHAR},
+			</if>
+			<if test="appname != null">
+				AppName = #{appname,jdbcType=VARCHAR},
+			</if>
+			<if test="amountplm != null">
+				AmountPLM = #{amountplm,jdbcType=DECIMAL},
+			</if>
+			<if test="amountprm != null">
+				AmountPRM = #{amountprm,jdbcType=DECIMAL},
+			</if>
+			<if test="amountrecived != null">
+				AmountRecived = #{amountrecived,jdbcType=DECIMAL},
+			</if>
+			<if test="amountreturn != null">
+				AmountReturn = #{amountreturn,jdbcType=DECIMAL},
+			</if>
+			<if test="amountdeduct != null">
+				AmountDeduct = #{amountdeduct,jdbcType=DECIMAL},
+			</if>
+			<if test="amountaddition != null">
+				AmountAddition = #{amountaddition,jdbcType=DECIMAL},
+			</if>
+			<if test="amounttotal != null">
+				AmountTotal = #{amounttotal,jdbcType=DECIMAL},
+			</if>
+			<if test="ratioinner != null">
+				RatioInner = #{ratioinner,jdbcType=DECIMAL},
+			</if>
+			<if test="ratiooutter != null">
+				RatioOutter = #{ratiooutter,jdbcType=DECIMAL},
+			</if>
+		</set>
+		where ID = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.gary.operation.domain.Previewresult">
+		update
+		PreviewResult
+		set PID = #{pid,jdbcType=VARCHAR},
+		AppName =
+		#{appname,jdbcType=VARCHAR},
+		AmountPLM = #{amountplm,jdbcType=DECIMAL},
+		AmountPRM = #{amountprm,jdbcType=DECIMAL},
+		AmountRecived =
+		#{amountrecived,jdbcType=DECIMAL},
+		AmountReturn =
+		#{amountreturn,jdbcType=DECIMAL},
+		AmountDeduct =
+		#{amountdeduct,jdbcType=DECIMAL},
+		AmountAddition =
+		#{amountaddition,jdbcType=DECIMAL},
+		AmountTotal =
+		#{amounttotal,jdbcType=DECIMAL},
+		RatioInner =
+		#{ratioinner,jdbcType=DECIMAL},
+		RatioOutter =
+		#{ratiooutter,jdbcType=DECIMAL}
+		where ID = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

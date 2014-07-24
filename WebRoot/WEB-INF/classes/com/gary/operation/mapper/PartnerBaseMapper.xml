@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gary.operation.mapper.PartnerBaseMapper">
+	<resultMap id="BaseResultMap" type="com.gary.operation.domain.PartnerBase">
+		<id column="ID" property="id" jdbcType="VARCHAR" />
+		<result column="PCode" property="pcode" jdbcType="VARCHAR" />
+		<result column="Name" property="name" jdbcType="VARCHAR" />
+		<result column="ChannelID" property="channelid" jdbcType="VARCHAR" />
+		<result column="PayRatio" property="payratio" jdbcType="DECIMAL" />
+		<result column="IsChannel" property="ischannel" jdbcType="BIT" />
+		<result column="UserID" property="userid" jdbcType="VARCHAR" />
+
+	</resultMap>
+	<sql id="Base_Column_List">
+		ID, PCode, Name, ChannelID, PayRatio, IsChannel,UserID
+	</sql>
+	<!-- 通过用户id获取开发者ID,用于查询当前登录用户的结算单 -->
+	<select id="getChannelIDByUserID" resultType="hashmap" parameterType="java.lang.String">
+		SELECT [ChannelID] FROM [PARTNER_BASE] WHERE UserID=#{userid,jdbcType=VARCHAR}
+	</select>
+	<!-- 根据track表的id 查询一条数据 导出excel用 返回map -->
+	<select id="getPartnerMap" resultType="hashmap" parameterType="java.lang.String">
+		SELECT [Name]
+		,PARTNER_DETAIL.BankName
+		,PARTNER_DETAIL.BankAccount
+		FROM [PARTNER_BASE]
+		inner join PARTNER_DETAIL on PARTNER_BASE.ID=PARTNER_DETAIL.ID
+		where PARTNER_BASE.ChannelID=(select PreviewTrack.DeveloperID from
+		PreviewTrack where ID=#{trackId,jdbcType=VARCHAR})
+	</select>
+	<!-- 查询所有用户的结算率 -->
+	<select id="selectAllUserPayratio" resultType="PartnerBase">
+		SELECT [ChannelID]
+		,[PayRatio] FROM [PARTNER_BASE]
+	</select>
+	<select id="select" resultType="PartnerBase">
+		SELECT * FROM Partner_Base
+		<where>
+			<if test="pcode != null">
+				AND PCode like '%${pcode}%'
+			</if>
+			<if test="name != null">
+				AND Name like '%${name}%'
+			</if>
+			<if test="channelid != null">
+				AND ChannelID like '%${channelid}%'
+			</if>
+			<if test="payratio != null">
+				AND PayRatio = #{payratio,jdbcType=DECIMAL}
+			</if>
+			<if test="ischannel != null">
+				AND IsChannel = #{ischannel,jdbcType=BIT}
+			</if>
+			<if test="userid != null">
+				AND UserID = #{userid,jdbcType=VARCHAR}
+			</if>
+		</where>
+		ORDER BY PCode DESC
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from PARTNER_BASE
+		where ID = #{id,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		PARTNER_BASE
+		where ID = #{id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.gary.operation.domain.PartnerBase">
+		insert into PARTNER_BASE (ID,
+		PCode, Name,
+		ChannelID, UserID,PayRatio, IsChannel
+		)
+		values
+		(#{id,jdbcType=VARCHAR}, #{pcode,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{channelid,jdbcType=VARCHAR},#{userid,jdbcType=VARCHAR},
+		#{payratio,jdbcType=DECIMAL}, #{ischannel,jdbcType=BIT}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.gary.operation.domain.PartnerBase">
+		insert into PARTNER_BASE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID,
+			</if>
+			<if test="pcode != null">
+				PCode,
+			</if>
+			<if test="name != null">
+				Name,
+			</if>
+			<if test="channelid != null">
+				ChannelID,
+			</if>
+			<if test="payratio != null">
+				PayRatio,
+			</if>
+			<if test="ischannel != null">
+				IsChannel,
+			</if>
+			<if test="userid != null">
+				UserID,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="pcode != null">
+				#{pcode,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="channelid != null">
+				#{channelid,jdbcType=VARCHAR},
+			</if>
+			<if test="payratio != null">
+				#{payratio,jdbcType=DECIMAL},
+			</if>
+			<if test="ischannel != null">
+				#{ischannel,jdbcType=BIT},
+			</if>
+			<if test="userid != null">
+				#{userid,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.gary.operation.domain.PartnerBase">
+		update PARTNER_BASE
+		<set>
+			<if test="pcode != null">
+				PCode = #{pcode,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				Name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="channelid != null">
+				ChannelID = #{channelid,jdbcType=VARCHAR},
+			</if>
+			<if test="payratio != null">
+				PayRatio = #{payratio,jdbcType=DECIMAL},
+			</if>
+			<if test="ischannel != null">
+				IsChannel = #{ischannel,jdbcType=BIT},
+			</if>
+			<if test="userid != null">
+				UserID = #{userid,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where ID = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.gary.operation.domain.PartnerBase">
+		update
+		PARTNER_BASE
+		set PCode = #{pcode,jdbcType=VARCHAR},
+		Name =
+		#{name,jdbcType=VARCHAR},
+		ChannelID = #{channelid,jdbcType=VARCHAR},
+		PayRatio = #{payratio,jdbcType=DECIMAL},
+		IsChannel =
+		#{ischannel,jdbcType=BIT},
+		UserID = #{userid,jdbcType=VARCHAR},
+		where ID
+		= #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

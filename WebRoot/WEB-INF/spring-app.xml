@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+	http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+
+	<!-- 扫描包 -->
+	<context:component-scan base-package="com.gary.*" />
+
+	<!-- 类级别映射 -->
+	<bean
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+	</bean>
+
+	<!-- 方法适配 -->
+	<bean
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<!-- 配置转换器 -->
+		<property name="messageConverters">
+			<list>
+				<!-- 支持JSON -->
+				<bean class="com.gary.base.convert.JacksonHttpMessageConverter">
+					<property name="supportedMediaTypes">
+						<list>
+							<value>application/json;charset=UTF-8</value>
+							<value>text/html;charset=UTF-8</value>
+							<value>text/javascript;charset=UTF-8</value>
+						</list>
+					</property>
+				</bean>
+			</list>
+		</property>
+		<!-- 配置参数转换器 -->
+		<property name="customArgumentResolvers">
+			<list>
+				<!-- 处理JSON参数自动映射到java对象 -->
+				<bean class="com.gary.base.convert.JsonParameterConvert" />
+				<bean class="com.gary.base.convert.GridParameterConvert" />
+				<bean class="com.gary.base.convert.MapParameterConvert" />
+				<bean class="com.gary.base.convert.WebPageConvert" />
+			</list>
+		</property>
+		<property name="webBindingInitializer" ref="webBindingInitializer" />
+	</bean>
+
+	<!-- 注册ConversionService -->
+	<bean id="conversionService"
+		class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+		<property name="converters">
+			<list>
+				<bean class="com.gary.base.convert.StringToDateConvert" />
+				<bean class="com.gary.base.convert.CustomStringToNumberConvertFactory" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 使用ConfigurableWebBindingInitializer注册conversionService -->
+	<bean id="webBindingInitializer"
+		class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
+		<property name="conversionService" ref="conversionService" />
+	</bean>
+<!--
+	<bean id="exceptionResolver"
+		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="statusCodes">
+			<props>
+				<prop key="error500.html">500</prop>
+				<prop key="error404.html">404</prop>
+			</props>
+		</property>
+		<property name="defaultErrorView" value="error.html" />
+	</bean>
+ -->
+	<!-- 配置文件上传 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxInMemorySize" value="1024" />
+		<property name="uploadTempDir" value="upload/temp" />
+		<property name="defaultEncoding" value="UTF-8" />
+	</bean>
+
+	<!-- jsp jstl -->
+	<bean id="JSPViewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="viewNames" value="*jsp" />
+		<property name="contentType" value="text/html; charset=utf-8" />
+		<property name="prefix" value="/" />
+		<property name="suffix" value="" />
+		<property name="order" value="1"></property>
+	</bean>
+
+	<!-- freemarker config -->
+	<bean id="freemarkerConfig"
+		class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<property name="templateLoaderPath" value="/" />
+		<property name="freemarkerVariables">  
+            <map>  
+                <entry key="topN" value-ref="TopNAticleMethod" />
+                <entry key="categoryTree" value-ref="CategoryTreeMethod" />
+                <entry key="TopCategoryTree" value-ref="TopCategoryTreeMethod" />
+                <entry key="LeafCategory" value-ref="LeafCategoryMethod" />
+                <entry key="webRoot" value="/MyApp/web"></entry>  
+                <entry key="SiteMap" value-ref="SiteMapMethod" />
+                <entry key="clink" value-ref="CLinkMethod" />
+                <entry key="alink" value-ref="ALinkMethod" />
+            </map>  
+        </property>  
+		<property name="defaultEncoding" value="UTF-8" />
+		<property name="freemarkerSettings">
+			<props>
+				<!-- <prop key="template_update_delay">36000000</prop> -->
+				<prop key="default_encoding">UTF-8</prop>
+				<prop key="output_encoding">UTF-8</prop>
+				<prop key="locale">zh_CN</prop>
+				<prop key="number_format">0.##</prop>
+				<prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+				<prop key="date_format">yyyy-MM-dd</prop>
+				<prop key="time_format">HH:mm:ss</prop>
+				<prop key="classic_compatible">true</prop>
+			</props>
+		</property>
+	</bean>
+	<!-- 注册freemarker的自定义全局方法对象  lyh  begin-->
+    <bean id="TopNAticleMethod" class="com.gary.operation.controller.website.freemarkerExt.TopNAticleMethod" />
+    <bean id="CategoryTreeMethod" class="com.gary.operation.controller.website.freemarkerExt.CategoryTreeMethod" />
+    <bean id="SiteMapMethod" class="com.gary.operation.controller.website.freemarkerExt.SiteMapMethod" />
+     <bean id="TopCategoryTreeMethod" class="com.gary.operation.controller.website.freemarkerExt.TopLevelCategoryTreeMethod" />
+        <bean id="LeafCategoryMethod" class="com.gary.operation.controller.website.freemarkerExt.LeafCategoryMethod" />
+    <bean id="CLinkMethod" class="com.gary.operation.controller.website.freemarkerExt.CLinkMethod" />
+    <bean id="ALinkMethod" class="com.gary.operation.controller.website.freemarkerExt.ALinkMethod" />
+    
+    <!-- 注册freemarker的自定义全局方法对象   end-->
+    
+	<bean id="FMViewResolver"
+		class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.freemarker.FreeMarkerView" />
+		<property name="viewNames" value="*html" />
+		<property name="contentType" value="text/html; charset=utf-8" />
+		<property name="cache" value="true" />
+		<property name="prefix" value="/" />
+		<property name="suffix" value="" />
+		<property name="order" value="0"></property>
+	</bean>
+
+	<!-- Spring拦截器 -->
+	<mvc:interceptors>
+		<bean class="com.gary.base.interceptor.LoginValidateInterceptor" />
+		<bean class="com.gary.base.interceptor.ActionRightsInterceptor" />
+	</mvc:interceptors>
+	
+	<!-- bean id="topNAticleMethod" class="com.gary.operation.controller.website.freemarkerExt.topNAticleMethod"></bean> -->
+
+</beans>

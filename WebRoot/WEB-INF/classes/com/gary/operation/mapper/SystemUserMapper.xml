@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gary.operation.mapper.SystemUserMapper">
+	<select id="getSystemUserByNameAndPwd" resultType="SystemUser"
+		parameterType="SystemUser">
+		SELECT a.*, b.departmentName FROM dbo.[SYSTEM_USER] a 
+		LEFT JOIN dbo.System_Department b ON a.departmentID = b.id
+		WHERE username = #{username} AND password = #{password}
+	</select>
+
+	<select id="selectSystemUser" resultType="SystemUser">
+		SELECT a.*, b.departmentName FROM dbo.[SYSTEM_USER] a 
+		LEFT JOIN dbo.System_Department b ON a.departmentID = b.id
+		<where>
+			<if test="realName != null and realName != ''">
+				(realName = #{realName} OR pinyinCode = #{realName})
+			</if>
+			<if test="username != null and username != ''">
+				AND username = #{username}
+			</if>
+			<if test="phone != null and phone != ''">
+				AND phone = #{phone}
+			</if>
+			<if test="state != null and state != ''">
+				AND state = #{state}
+			</if>
+			<if test="departmentId != null and departmentId != ''">
+				AND departmentID = #{departmentId}
+			</if>						
+		</where>
+		ORDER BY a.createDate
+	</select>
+	<!-- 返回存在该用户名的行数,用来判断是否存在用户 -->
+	<select id="selectIsHasUser" resultType="java.lang.Integer"
+		parameterType="java.lang.String">
+		select COUNT(username) from [System_User]  where username=#{username,jdbcType=VARCHAR}
+	</select>
+	<select id="getSystemUserById" resultType="SystemUser">
+		SELECT * FROM
+		dbo.[SYSTEM_USER] WHERE id = #{id}
+	</select>
+	
+	<select id="selectActionByUserId" resultType="string">
+		SELECT DISTINCT action_id FROM System_User_Actions
+		WHERE id = #{id}
+	</select>
+	
+	<insert id="insertSystemUser" parameterType="SystemUser">
+		IF NOT EXISTS
+		(SELECT id FROM dbo.[System_User] WHERE id = #{id})
+		BEGIN
+			INSERT INTO
+			dbo.[System_User]
+			( id ,
+			username ,
+			realName ,
+			password ,
+			email ,
+			phone ,
+			gender ,
+			createDate ,
+			departmentID ,
+			pinyinCode ,
+			roles
+			)
+			VALUES ( #{id} ,
+			#{username} ,
+			#{realName} ,
+			#{password} ,
+			#{email} ,
+			#{phone} ,
+			#{gender} ,
+			#{createDate} ,
+			#{departmentID} ,
+			#{pinyinCode} ,
+			#{roles}
+			)
+		END
+		ELSE
+		BEGIN
+			UPDATE
+			dbo.[System_User] SET
+			username = #{username},
+			realName = #{realName},
+			email = #{email} ,
+			phone = #{phone} ,
+			gender = #{gender} ,
+			departmentID =#{departmentID} ,
+			pinyinCode = #{pinyinCode} ,
+			roles = #{roles}
+			WHERE id = #{id}
+		END
+	</insert>
+
+	<update id="updateSystemUser" parameterType="SystemUser">
+		UPDATE
+		dbo.[System_User] SET
+		username = #{username},
+		realName = #{realName},
+		email = #{email} ,
+		phone = #{phone} ,
+		gender = #{gender} ,
+		departmentID =#{departmentID} ,
+		pinyinCode = #{pinyinCode} ,
+		roles = #{roles}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updatePassword" parameterType="SystemUser">
+		UPDATE
+		dbo.[System_User] SET
+		password = #{password}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateState" parameterType="SystemUser">
+		UPDATE
+		dbo.[System_User] SET
+		state = #{state}
+		WHERE id = #{id}
+	</update>
+	
+	<insert id="insertUserRole" parameterType="SystemUserRole">
+		  INSERT INTO dbo.System_User_Role
+          ( id, user_id, role_id )
+ 		 VALUES  ( #{id}, #{user_id}, #{role_id}
+            )
+	</insert>
+	
+	<delete id="deleteUserRole" parameterType="string">
+		DELETE dbo.System_User_Role WHERE user_id = #{userId}
+	</delete>
+</mapper>
